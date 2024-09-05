@@ -150,25 +150,13 @@ int Client::GenerateKeyId() {
   mbedtls_sha1_context sha1_context;
   mbedtls_sha1_init(&sha1_context);
 
-  int return_code = mbedtls_sha1_starts(&sha1_context);
-  if (return_code != 0) {
-    printf("Last error was: -0x%04x\n\n", (unsigned int)-return_code);
-    return 1;
-  }
+  mbedtls_sha1_starts(&sha1_context);
 
-  return_code = mbedtls_sha1_update(&sha1_context, this->public_key_,
+  mbedtls_sha1_update(&sha1_context, this->public_key_,
                                     this->public_key_size_);
-  if (return_code != 0) {
-    printf("Last error was: -0x%04x\n\n", (unsigned int)-return_code);
-    return 1;
-  }
 
   unsigned char buffer[20];
-  return_code = mbedtls_sha1_finish(&sha1_context, buffer);
-  if (return_code != 0) {
-    printf("Last error was: -0x%04x\n\n", (unsigned int)-return_code);
-    return 1;
-  }
+  mbedtls_sha1_finish(&sha1_context, buffer);
 
   // we only need the first 4 bytes
   memcpy(this->key_id_, buffer, 4);
@@ -238,24 +226,12 @@ int Client::LoadTeslaKey(const uint8_t *public_key_buffer,
   mbedtls_sha1_context sha1_context;
   mbedtls_sha1_init(&sha1_context);
 
-  return_code = mbedtls_sha1_starts(&sha1_context);
-  if (return_code != 0) {
-    printf("Last error was: -0x%04x\n\n", (unsigned int)-return_code);
-    return 1;
-  }
+  mbedtls_sha1_starts(&sha1_context);
 
-  return_code = mbedtls_sha1_update(&sha1_context, temp_shared_secret,
+  mbedtls_sha1_update(&sha1_context, temp_shared_secret,
                                     temp_shared_secret_length);
-  if (return_code != 0) {
-    printf("Last error was: -0x%04x\n\n", (unsigned int)-return_code);
-    return 1;
-  }
 
-  return_code = mbedtls_sha1_finish(&sha1_context, this->shared_secret_);
-  if (return_code != 0) {
-    printf("Last error was: -0x%04x\n\n", (unsigned int)-return_code);
-    return 1;
-  }
+  mbedtls_sha1_finish(&sha1_context, this->shared_secret_);
 
   mbedtls_sha1_free(&sha1_context);
   return 0;
