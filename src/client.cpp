@@ -89,7 +89,7 @@ int Client::LoadPrivateKey(const uint8_t *private_key_buffer,
   unsigned char password[0];
   return_code = mbedtls_pk_parse_key(
       &this->private_key_context_, private_key_buffer, private_key_length,
-      password, 0, mbedtls_ctr_drbg_random, &this->drbg_context_);
+      password, 0);
 
   if (return_code != 0) {
     printf("Last error was: -0x%04x\n\n", (unsigned int)-return_code);
