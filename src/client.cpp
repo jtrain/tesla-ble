@@ -128,8 +128,8 @@ int Client::GetPrivateKey(unsigned char *output_buffer,
  */
 int Client::GeneratePublicKey() {
   int return_code = mbedtls_ecp_point_write_binary(
-      &mbedtls_pk_ec(this->private_key_context_)->private_grp,
-      &mbedtls_pk_ec(this->private_key_context_)->private_Q,
+      &mbedtls_pk_ec(this->private_key_context_)->grp,
+      &mbedtls_pk_ec(this->private_key_context_)->Q,
       MBEDTLS_ECP_PF_UNCOMPRESSED, &this->public_key_size_, this->public_key_,
       sizeof(this->public_key_));
 
@@ -190,7 +190,7 @@ int Client::LoadTeslaKey(const uint8_t *public_key_buffer,
   size_t temp_shared_secret_length = 0;
   mbedtls_ecp_keypair_init(&this->tesla_key_);
 
-  int return_code = mbedtls_ecp_group_load(&this->tesla_key_.private_grp,
+  int return_code = mbedtls_ecp_group_load(&this->tesla_key_.grp,
                                            MBEDTLS_ECP_DP_SECP256R1);
   if (return_code != 0) {
     printf("Last error was: -0x%04x\n\n", (unsigned int)-return_code);
@@ -198,7 +198,7 @@ int Client::LoadTeslaKey(const uint8_t *public_key_buffer,
   }
 
   return_code = mbedtls_ecp_point_read_binary(
-      &this->tesla_key_.private_grp, &this->tesla_key_.private_Q,
+      &this->tesla_key_.grp, &this->tesla_key_.Q,
       public_key_buffer, public_key_size);
 
   if (return_code != 0) {
