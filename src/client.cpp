@@ -22,7 +22,7 @@ namespace TeslaBLE {
  * @param counter Last known counter sent by the carz
  * @return void
  */
-void Client::SetCounter(const u_int32_t *counter) {
+void Client::SetCounter(const uint32_t *counter) {
   this->counter_ = *counter + 1;
 }
 

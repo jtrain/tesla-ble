@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
+typedef uint32_t uint32_t;
+
 #include "NimBLEDevice.h"
 #include "client.h"
 #include "esp_system.h"
