@@ -269,16 +269,17 @@ int Client::Encrypt(unsigned char *input_buffer, size_t input_buffer_length,
     return 1;
   }
 
+  uint8_t add[0];
   return_code = mbedtls_gcm_starts(&aes_context, MBEDTLS_GCM_ENCRYPT, nonce,
-                                   sizeof(nonce));
+                                   sizeof(nonce), add, sizeof(add));
   if (return_code != 0) {
     printf("Last error was: -0x%04x\n\n", (unsigned int)-return_code);
     return 1;
   }
 
   return_code =
-      mbedtls_gcm_update(&aes_context, input_buffer, input_buffer_length,
-                         output_buffer, output_buffer_length, output_length);
+      mbedtls_gcm_update(&aes_context, input_buffer_length, input_buffer,
+                         output_buffer);
 
   if (return_code != 0) {
     printf("Last error was: -0x%04x\n\n", (unsigned int)-return_code);
@@ -289,8 +290,7 @@ int Client::Encrypt(unsigned char *input_buffer, size_t input_buffer_length,
   unsigned char finish_buffer[15];
 
   return_code =
-      mbedtls_gcm_finish(&aes_context, finish_buffer, sizeof(finish_buffer),
-                         &finish_buffer_length, signature_buffer, 16);
+      mbedtls_gcm_finish(&aes_context, signature_buffer, 16);
 
   if (return_code != 0) {
     printf("Last error was: -0x%04x\n\n", (unsigned int)-return_code);
